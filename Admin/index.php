@@ -1,59 +1,28 @@
 <?php
 
-session_start();  // Asegúrate de que la sesión esté iniciada
-
 require_once('../config/conex.php');
 $conex = new Database;
 $con = $conex->conectar();
 
-// Verificar si la sesión tiene el email
-if (!isset($_SESSION['email'])) {
-    echo '<script>alert("No se ha iniciado sesión correctamente.");</script>';
-    echo '<script>window.location = "../login.php";</script>';
-    exit();
-}
 
-$email = $_SESSION['email'];
+// $email = $_SESSION['email'];
 
-// Verificar si el email no está vacío
-if (empty($email)) {
-    echo '<script>alert("El email no está disponible.");</script>';
-    echo '<script>window.location = "../login.php";</script>';
-    exit();
-}
+// $sql = $con->prepare("SELECT clientes.nombre, empresas.nombre_empresa, empresas.id_empresa FROM clientes INNER JOIN rol ON clientes.id_rol = rol.id_rol INNER JOIN empresas ON clientes.id_empresa = empresas.id_empresa WHERE clientes.email = ? AND clientes.id_rol = 1
+// ");
+// $sql->execute([$email]);
+// $fila = $sql->fetch(PDO::FETCH_ASSOC);
 
-$sql = $con->prepare("SELECT clientes.nombre, empresas.nombre_empresa, empresas.id_empresa 
-                      FROM clientes 
-                      INNER JOIN rol ON clientes.id_rol = rol.id_rol 
-                      INNER JOIN empresas ON clientes.id_empresa = empresas.id_empresa 
-                      WHERE clientes.email = ? AND clientes.id_rol = 1");
 
-$sql->execute([$email]);
+// if (!$fila) {
+//     echo '<script>alert("No se encontró información del administrador.");</script>';
+//     echo '<script>window.location = "../login.php";</script>';
+//     exit();
+// }
 
-// Comprobar si la consulta tuvo éxito
-if ($sql->errorCode() != '00000') {
-    echo '<script>alert("Error en la consulta: ' . implode(', ', $sql->errorInfo()) . '");</script>';
-    exit();
-}
 
-$fila = $sql->fetch(PDO::FETCH_ASSOC);
-
-// Verificar si se obtuvieron resultados
-if (!$fila) {
-    echo '<script>alert("No se encontró información del administrador.");</script>';
-    echo '<script>window.location = "../login.php";</script>';
-    exit();
-}
-
-// Verificar el contenido de la fila para depuración
-echo '<pre>';
-var_dump($fila); // Esto te permitirá ver el contenido de la variable fila
-echo '</pre>';
-
-$nombre = $fila['nombre'];
-$empresa = $fila['nombre_empresa'];
-$nit = $fila['id_empresa'];
-
+// $nombre = $fila['nombre'];
+// $empresa = $fila['nombre_empresa'];
+// $nit = $fila['id_empresa'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -69,7 +38,7 @@ $nit = $fila['id_empresa'];
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient( right,rgb(255, 253, 253), #f5faff);
+            background: linear-gradient( right,rgba(255, 8, 8, 0.33), #f5faff);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -151,24 +120,17 @@ $nit = $fila['id_empresa'];
     </style>
 </head>
 <body>
-<div class="navbar">
-    <div class="admin-name">👤 Administrador: <?php echo $nombre; ?></div>
-    <div class="admin-empre">🏢 Empresa: <?php echo $empresa; ?></div>
-    <div class="admin-nit">📄 NIT: <?php echo $nit; ?></div>
-    <a href="../validar/salir.php">
-        <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-    </a>
-</div>
-    
-<div class="container">
-    <h1>Bienvenido al Sistema</h1>
-    <h3>Módulos principales</h3>
-    <ul>
-        <li><a href="procesa.php">Procesadores</a></li>
-        <li><a href="crear_usua.php">Crear Usuarios</a></li>
-        <button onclick="location.href='../include/salir.php'" class="btn btn-primary">
-        Cerrar sesión
-    </ul>
-</div>
+
+    <div class="container">
+        <h1>Bienvenido al Sistema</h1>
+        <h3>Módulos principales</h3>
+        <ul>
+            <li><a href="procesa.php">Procesadores</a></li>
+            <li><a href="crear_usua.php">Crear Usuarios</a></li>
+            <button onclick="location.href='../include/salir.php'" class="btn btn-primary">
+            Cerrar sesión
+        </ul>
+        
+    </div>
 </body>
 </html>

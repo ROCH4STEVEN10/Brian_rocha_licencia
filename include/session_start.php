@@ -21,7 +21,7 @@ if (isset($_POST['submit'])){
             echo $_SESSION['documento'], $_SESSION['contra'], $_SESSION['id_rol'];
 
             if ($_SESSION['id_rol'] == 1) {
-                header("location: ../admin/index.php");
+                header("location: ../Admin/index.php");
                 exit();
             } elseif ($_SESSION['id_rol'] == 2) {
                 header("location: ../super_admin/index.php");
